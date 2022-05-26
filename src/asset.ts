@@ -1,5 +1,5 @@
 import { registerAssetService } from '@soda/soda-asset'
-import { MessageTypes, sendMessage } from '@soda/soda-core'
+import { getChainId, MessageTypes, sendMessage } from '@soda/soda-core'
 
 const MAINNET_CHAIN_ID = 1
 const retrieveCollections = () => {}
@@ -19,6 +19,15 @@ const getNFT = async (metaData: any) => {
       storage: 'ipfs'
     }
   }
+  const currentChainId = await getChainId()
+  if (Number(currentChainId) !== Number(metaData.chainId)) {
+    return {
+      ...metaData,
+      source: '',
+      type: 'image',
+      storage: 'ipfs'
+    }
+  }
   const req = {
     type: MessageTypes.InvokeERC721Contract,
     request: {
@@ -30,13 +39,19 @@ const getNFT = async (metaData: any) => {
   }
   const res: any = await sendMessage(req)
   // console.log('InvokeERC721Contract: ', res)
-  let source = res.result
-  try {
-    const obj = JSON.parse(source)
-    if (source) {
-      source = obj.image || obj.image_url
-    }
-  } catch (err) {}
+
+  let source = ''
+  if (res && res.result && typeof res.result === 'string') {
+    source = res.result
+  }
+  if (source && source.startsWith('{')) {
+    try {
+      const obj = JSON.parse(source)
+      if (source) {
+        source = obj.image || obj.image_url
+      }
+    } catch (err) {}
+  }
   return {
     chainId: Number(metaData.chainId),
     contract: metaData.contract,
