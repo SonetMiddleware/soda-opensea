@@ -1,9 +1,11 @@
-import { registerAssetService } from '@soda/soda-asset'
-import axios from 'axios'
+import { Function, registerAssetService } from '@soda/soda-asset'
+import { httpRequest } from '@soda/soda-util'
 const MAINNET_CHAIN_ID = 137
-const retrieveCollections = () => {}
 
-const retrieveAssets = () => {}
+const actions = {
+  1: [Function.getAssetInfo, Function.getBalance, Function.getRole],
+  4: [Function.getAssetInfo, Function.getBalance, Function.getRole]
+}
 
 const getNFT = async (metaData: any) => {
   const chainId = metaData.chainId
@@ -13,8 +15,7 @@ const getNFT = async (metaData: any) => {
   } else {
     url = `https://testnets-api.opensea.io/api/v1/asset/${metaData.contract}/${metaData.tokenId}/`
   }
-  const res = await axios.get(url)
-  const result = res.data
+  const result = await httpRequest({ url })
   return {
     ...metaData,
     source: result.image_url,
@@ -27,8 +28,6 @@ const init = () => {
   registerAssetService({
     name: 'opensea',
     meta: {
-      retrieveAssets: retrieveAssets,
-      retrieveCollections: retrieveCollections,
       getNFTFunc: getNFT
     }
   })

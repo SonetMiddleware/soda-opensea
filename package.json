@@ -18,9 +18,9 @@
   "author": "EuclidTwin",
   "license": "ISC",
   "dependencies": {
+    "@soda/soda-util": "workspace:^0.0.1",
     "@soda/soda-asset": "workspace:^0.0.1",
-    "@soda/soda-mp-sdk": "workspace:^0.0.1",
-    "axios": "^0.21.1"
+    "@soda/soda-mp-sdk": "workspace:^0.0.1"
   },
   "devDependencies": {
     "eslint": "^7.7.0",
