@@ -21,12 +21,13 @@ const getHost = async (params: { chainId?: number }) => {
   const { chainId } = params
   let baseUri = ''
   switch (chainId) {
-    case 1:
-      baseUri = 'https://opensea.io'
-      break
     case 4:
     case 80001:
       baseUri = 'https://testnets.opensea.io'
+      break
+    case 1:
+    default:
+      baseUri = 'https://opensea.io'
       break
   }
   return baseUri
