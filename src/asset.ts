@@ -1,26 +1,50 @@
-import { Function, registerAssetService } from '@soda/soda-asset'
+import {
+  AssetType,
+  Function,
+  NFT,
+  registerAssetService,
+  TokenCache
+} from '@soda/soda-asset'
+import { getOwnedTokens } from './assetList'
+import { getCollectionList, getCollectionTokenList } from './collection'
 import { httpRequest } from '@soda/soda-util'
-const MAINNET_CHAIN_ID = 137
+import * as Api from './service/apis'
 
 const actions = {
-  1: [Function.getAssetInfo, Function.getBalance, Function.getRole],
-  4: [Function.getAssetInfo, Function.getBalance, Function.getRole]
+  1: [
+    Function.getAssetInfo,
+    Function.getBalance,
+    Function.getRole,
+    Function.getCollectionList,
+    Function.getCollectionTokenList
+  ],
+  4: [
+    Function.getAssetInfo,
+    Function.getBalance,
+    Function.getRole,
+    Function.getCollectionList,
+    Function.getCollectionTokenList
+  ]
 }
 
-const getNFT = async (metaData: any) => {
-  const chainId = metaData.chainId
-  let url = ''
-  if (Number(chainId) === MAINNET_CHAIN_ID) {
-    url = `https://api.opensea.io/api/v1/asset/${metaData.contract}/${metaData.tokenId}/`
-  } else {
-    url = `https://testnets-api.opensea.io/api/v1/asset/${metaData.contract}/${metaData.tokenId}/`
-  }
-  const result = await httpRequest({ url })
+const getCapability = () => {
+  return actions
+}
+
+const getAssetInfo = async (
+  meta: TokenCache,
+  paymentMeta?: any
+): Promise<NFT> => {
+  const { chainId, contract, tokenId } = meta
+  const token = await Api.retrieveAsset(contract, tokenId)
   return {
-    ...metaData,
-    source: result.image_url,
-    type: 'image',
-    storage: 'ipfs'
+    type: AssetType.NFT,
+    chainId,
+    contract,
+    balance: 1,
+    tokenId,
+    source: token.image_url || token.image,
+    meta: { type: 'image', storage: 'ipfs' }
   }
 }
 
@@ -28,7 +52,11 @@ const init = () => {
   registerAssetService({
     name: 'opensea',
     meta: {
-      getNFTFunc: getNFT
+      getCapability,
+      getAssetInfo,
+      getOwnedTokens,
+      getCollectionList,
+      getCollectionTokenList
     }
   })
 }
