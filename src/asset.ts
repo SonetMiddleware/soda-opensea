@@ -1,5 +1,10 @@
 import { registerAssetService } from '@soda/soda-asset'
-import { getChainId, MessageTypes, sendMessage } from '@soda/soda-core'
+import {
+  getChainId,
+  getNFTSource,
+  MessageTypes,
+  sendMessage
+} from '@soda/soda-core'
 
 const MAINNET_CHAIN_ID = 1
 const retrieveCollections = () => {}
@@ -42,7 +47,9 @@ const getNFT = async (metaData: any) => {
 
   let source = ''
   if (res && res.result && typeof res.result === 'string') {
-    source = res.result
+    // source = res.result
+    source = await getNFTSource(res.result)
+    console.log('nft source: ', source)
   }
   if (source && source.startsWith('{')) {
     try {
@@ -60,31 +67,6 @@ const getNFT = async (metaData: any) => {
     type: 'image',
     storage: 'ipfs'
   }
-  // const key = `${metaData.contract}_${metaData.tokenId}`
-  // if (CachedAssetResult[key]) {
-  //   return CachedAssetResult[key]
-  // }
-  // const chainId = metaData.chainId
-  // let url = ''
-  // if (Number(chainId) === MAINNET_CHAIN_ID) {
-  //   url = `https://api.opensea.io/api/v1/asset/${metaData.contract}/${metaData.tokenId}/`
-  // } else {
-  //   url = `https://testnets-api.opensea.io/api/v1/asset/${metaData.contract}/${metaData.tokenId}/`
-  // }
-  // const res = await axios.get(url)
-  // console.log('get opensea NFT: ', res)
-  // const result = res.data
-  // const nft = {
-  //   ...metaData,
-  //   source: result.image_url || result?.asset_contract.image_url,
-  //   type: 'image',
-  //   storage: 'ipfs'
-  // }
-
-  // if (!CachedAssetResult[key]) {
-  //   CachedAssetResult[key] = nft
-  // }
-  // return nft
 }
 
 const init = () => {
