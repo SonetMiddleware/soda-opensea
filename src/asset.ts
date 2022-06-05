@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   AssetType,
   Function,
@@ -9,6 +10,18 @@ import { getOwnedTokens } from './assetList'
 import { getCollectionList, getCollectionTokenList } from './collection'
 import { httpRequest } from '@soda/soda-util'
 import * as Api from './service/apis'
+=======
+import { registerAssetService } from '@soda/soda-asset'
+import {
+  getChainId,
+  getNFTSource,
+  MessageTypes,
+  sendMessage
+} from '@soda/soda-core'
+
+const MAINNET_CHAIN_ID = 1
+const retrieveCollections = () => {}
+>>>>>>> main
 
 const actions = {
   1: [
