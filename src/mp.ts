@@ -11,7 +11,7 @@ const getItemPage = async (params: { token: NFT }) => {
     case 4:
       baseUri = 'https://testnets.opensea.io/assets/rinkeby'
       break
-    case 80001:
+    case 137:
       baseUri = 'https://testnets.opensea.io/assets/mumbai'
       break
   }
@@ -22,7 +22,7 @@ const getHost = async (params: { chainId?: number }) => {
   let baseUri = ''
   switch (chainId) {
     case 4:
-    case 80001:
+    case 137:
       baseUri = 'https://testnets.opensea.io'
       break
     case 1:
