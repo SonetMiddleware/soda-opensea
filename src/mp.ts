@@ -12,6 +12,9 @@ const getItemPage = async (params: { token: NFT }) => {
       baseUri = 'https://testnets.opensea.io/assets/rinkeby'
       break
     case 137:
+      baseUri = 'https://opensea.io/assets/matic'
+      break
+    case 80001:
       baseUri = 'https://testnets.opensea.io/assets/mumbai'
       break
   }
