@@ -48,11 +48,12 @@ export const retrieveCollections = async (
   return result
 }
 
-export const toToken = (t: IOwnedNFTData, chainId?: number): NFT => {
+export const toToken = (t: IOwnedNFTData, chainId: number): NFT => {
   return {
     type: t.erc == '1155' ? AssetType.PFT : AssetType.NFT,
     balance: t.amount,
     contract: t.contract,
+    chainId,
     tokenId: t.token_id,
     source: t.uri,
     owner: t.owner,
