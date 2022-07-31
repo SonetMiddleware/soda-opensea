@@ -1,5 +1,5 @@
 import { AssetType, NFT } from '@soda/soda-asset'
-import { getChainId, httpRequest } from '@soda/soda-util'
+import { API_HOST, getChainId, httpRequest } from '@soda/soda-util'
 
 const MAINNET_ID = 1
 const getHost = async (meta?: NFT | number) => {
@@ -29,7 +29,7 @@ export const retrieveCollections = async (
   params: IRetrieveCollectionsParam
 ): Promise<IGetCollectionListResult> => {
   const { owner_address, offset, limit } = params
-  const url = `${await getHost()}/collections`
+  const url = `${API_HOST}/collections`
   const p = {
     asset_owner: owner_address,
     offset: offset || 0,
@@ -88,7 +88,7 @@ export const retrieveAssets = async (
   params: IRetrieveAssetsParams
 ): Promise<IGetCollectionNFTListResult> => {
   const { chainId, owner, offset, limit, collection } = params
-  const url = `${await getHost(chainId)}/assets`
+  const url = `${API_HOST}/assets`
   const p = {
     owner: owner,
     order_direction: 'desc',
@@ -122,7 +122,7 @@ export const retrieveAsset = async (contract: string, tokenId: string) => {
   if (CachedAssetResult[key]) {
     return CachedAssetResult[key]
   }
-  const url = `${await getHost()}/asset/${contract}/${tokenId}/`
+  const url = `${API_HOST}/asset/${contract}/${tokenId}/`
   const res: any = await httpRequest({ url })
   const asset = res.data
   if (!CachedAssetResult[key]) {
